@@ -53,6 +53,16 @@ function indexToRowCol(board,i){
     return rowcol;
 }
 
+function setBoardCell(board, letter, row, col){
+    // Set the value of the cell at the specified row and column numbers on the
+    // board to the value, letter without mutating the original board passed in
+    const newBoard = [...board];
+    const ind = rowColToIndex(board, row, col);
+    newBoard[ind] = letter;
+
+    return newBoard;
+}
+
 //module exports
 
 module.exports = {
@@ -60,6 +70,6 @@ module.exports = {
     generateBoard: generateBoard    
 }
 
-const board = generateBoard(4,4);
-const out = indexToRowCol(board, 9);
+const board = generateBoard(3,3);
+const out = setBoardCell(board, 'x', 1, 1);
 console.log(out);
