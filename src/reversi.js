@@ -9,7 +9,7 @@ function repeat(ele, n){
         //console.log(arr);
         arr.push(ele);
     }
-    
+
     return arr;
 }
 
@@ -24,7 +24,15 @@ function generateBoard(rows, cols, initialValue = " "){
 }
 
 function rowColToIndex(board, rowNumber, columnNumber){
+    // A cell in a Reversi board can be specified by a row number and
+    // column number. However, our board implementation uses one dimensional
+    // array, so a cell must be specified by a single index. This function
+    // translates a row and a column into an index in the one dimensional 
+    // array representation of a Reversi board
+    const widthHeight = Math.sqrt(board.length);
+    const ind = (rowNumber * widthHeight) + columnNumber;
 
+    return ind;
 }
 
 //module exports
@@ -34,5 +42,6 @@ module.exports = {
     generateBoard: generateBoard    
 }
 
-const board = generateBoard(3,3);
-console.log(board);
+const board = generateBoard(4,4);
+const out = rowColToIndex(board,2,3);
+console.log(out);
