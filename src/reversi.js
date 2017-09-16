@@ -35,6 +35,24 @@ function rowColToIndex(board, rowNumber, columnNumber){
     return ind;
 }
 
+function indexToRowCol(board,i){
+    // Translates a single index in a one dimensional array representation of
+    // a board to that cell's row and column. The board supplied can be used 
+    // to determine the max column and row numbers. You can assume that the 
+    // board is always square. Row and column numbers start at 0.
+    const rowcol = new Object;
+    const widthHeight = Math.sqrt(board.length);
+
+    const row = Math.floor(i/widthHeight);
+    const col = i - (row*widthHeight);
+
+    rowcol["row"] = row;
+    rowcol["col"] = col;
+    //console.log(row,col);
+
+    return rowcol;
+}
+
 //module exports
 
 module.exports = {
@@ -43,5 +61,5 @@ module.exports = {
 }
 
 const board = generateBoard(4,4);
-const out = rowColToIndex(board,2,3);
+const out = indexToRowCol(board, 9);
 console.log(out);
