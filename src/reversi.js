@@ -139,5 +139,6 @@ module.exports = {
 const board = generateBoard(4,4);
 //const out = setBoardCell(board, 'x', 1, 1);
 //const out = algebraicToRowCol("A6");
-const out = placeLetters(board, 'x', 'B3', 'D4');
+//const out = placeLetters(board, 'x', 'B3', 'D4');
+const out = boardToString(board);
 console.log(out);
