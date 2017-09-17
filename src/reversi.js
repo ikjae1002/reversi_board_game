@@ -1,5 +1,8 @@
 // reversi.js
 
+const alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O',
+'P','Q','R','S','T','U','V','W','X','Y','Z'];
+
 function repeat(ele, n){
     // repeat creates an array that contains value as each element
     // for n elements.
@@ -68,8 +71,6 @@ function algebraicToRowCol(algebraicNotation){
     // specifiying the same cell. If the notation passed in is not valid,
     // then return undefined.
     let i;
-    const alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O',
-                   'P','Q','R','S','T','U','V','W','X','Y','Z'];
     if(algebraicNotation.length >= 2){
         let goodtogo = false;
         const exp = /[A-Z]/gi;
@@ -125,7 +126,20 @@ function boardToString(board){
     for(let i = 0; i < widthHeight; i++){
         hor += "---+";
     }
-    console.log(hor);
+    let col = "    ";
+    for(let i = 0; i < widthHeight; i++){
+        col += alpha[i];
+        col += "   ";
+    }//console.log(col);
+    // console.log(hor);
+    let outstr = col; outstr += "\n" + hor;
+    for(let i = 0; i < widthHeight; i++){
+        let ver = i+1; ver += " | ";
+        for(let j = 0; j < widthHeight; j++){
+            const ind = rowColToIndex(board, i, j);
+            ver += board[ind]; ver += " | ";
+        }outstr += "\n" + ver + "\n" + hor;
+    }console.log(outstr);
 }
 
 //module exports
@@ -136,9 +150,9 @@ module.exports = {
 }
 
 
-const board = generateBoard(4,4);
+const board = generateBoard(7,7);
 //const out = setBoardCell(board, 'x', 1, 1);
 //const out = algebraicToRowCol("A6");
-//const out = placeLetters(board, 'x', 'B3', 'D4');
-const out = boardToString(board);
+const outb = placeLetters(board, 'x', 'B3', 'D4');
+const out = boardToString(outb);
 console.log(out);
