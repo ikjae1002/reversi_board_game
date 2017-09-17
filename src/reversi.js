@@ -63,7 +63,7 @@ function setBoardCell(board, letter, row, col){
     return newBoard;
 }
 
-function algebraicToRowCol(algebraicNotation, board){ // ***********************
+function algebraicToRowCol(algebraicNotation){
     // Translates algebraic notation specifying a cell into a row and column
     // specifiying the same cell. If the notation passed in is not valid,
     // then return undefined.
@@ -74,16 +74,13 @@ function algebraicToRowCol(algebraicNotation, board){ // ***********************
         let goodtogo = false;
         const exp = /[A-Z]/gi;
         const col = algebraicNotation.match(exp);
-        console.log(col[0]);
         if (alpha.includes(col[0])){
             goodtogo = true;
         }
         algebraicNotation = algebraicNotation.substr(1);
-        console.log(algebraicNotation);
-        if(isNaN(algebraicNotation) || algebraicNotation > 27 || algebraicNotation < 3){
+        if(isNaN(algebraicNotation) || algebraicNotation > 26){
             goodtogo = false;
-            console.log("notation is wrong");
-        }const row = algebraicNotation;
+        }const row = algebraicNotation -1;
         if(goodtogo){
             let column;
             for(i = 0; i<alpha.length; i++){
@@ -98,12 +95,37 @@ function algebraicToRowCol(algebraicNotation, board){ // ***********************
     }
 }
 
-function placeLetters(board, letter, algebraicNotation){
+function placeLetters(board, letter, ...algebraicNotation){
+    // Translates one or more moves in algebraic notation to row and column...
+    // and uses the row and column to set the letter specified on the board.
 
+    let i;
+    let j;
+    for(i = 0; i < algebraicNotation.length; i++){
+        const ob = algebraicToRowCol(algebraicNotation[i]);
+        const copy = setBoardCell(board, letter, ob['row'], ob['col']);
+        for(j = 0; j < copy.length; j++){
+            if(letter === copy[j]){
+                board[j] = letter;
+            }
+        }
+    }
+
+    return board;
 }
 
 function boardToString(board){
-
+    // creates a text drawing representation of the board passed in. The
+    // board should have:
+    //  - boarders between each cell
+    //  - the contents of each cell
+    //  - labels on the rows and columns
+    const widthHeight = Math.sqrt(board.length);
+    let hor = "  +";
+    for(let i = 0; i < widthHeight; i++){
+        hor += "---+";
+    }
+    console.log(hor);
 }
 
 //module exports
@@ -114,7 +136,8 @@ module.exports = {
 }
 
 
-const board = generateBoard(20,20);
+const board = generateBoard(4,4);
 //const out = setBoardCell(board, 'x', 1, 1);
-const out = algebraicToRowCol("A6");
+//const out = algebraicToRowCol("A6");
+const out = placeLetters(board, 'x', 'B3', 'D4');
 console.log(out);
