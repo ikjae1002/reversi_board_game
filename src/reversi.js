@@ -139,7 +139,18 @@ function boardToString(board){
             const ind = rowColToIndex(board, i, j);
             ver += board[ind]; ver += " | ";
         }outstr += "\n" + ver + "\n" + hor;
-    }console.log(outstr);
+    }
+
+    return outstr;
+}
+
+function isBoardFull(board){
+    // Examines the board passed in to determine whether or not it's full.
+    // it returns true if there are no empty squares, false if there are 
+    // still squares available. Assume that the board uses the space
+    // character , " ", to mark a square as empty"
+
+    return !board.includes(" ");
 }
 
 //module exports
@@ -150,9 +161,10 @@ module.exports = {
 }
 
 
-const board = generateBoard(7,7);
+const board = generateBoard(3,3);
 //const out = setBoardCell(board, 'x', 1, 1);
 //const out = algebraicToRowCol("A6");
-const outb = placeLetters(board, 'x', 'B3', 'D4');
+const outb = placeLetters(board, 'x', 'A1', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3');
 const out = boardToString(outb);
-console.log(out);
+const outa = isBoardFull(outb);
+console.log(out, outa);
