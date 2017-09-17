@@ -63,6 +63,49 @@ function setBoardCell(board, letter, row, col){
     return newBoard;
 }
 
+function algebraicToRowCol(algebraicNotation, board){ // ***********************
+    // Translates algebraic notation specifying a cell into a row and column
+    // specifiying the same cell. If the notation passed in is not valid,
+    // then return undefined.
+    let i;
+    const alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O',
+                   'P','Q','R','S','T','U','V','W','X','Y','Z'];
+    if(algebraicNotation.length >= 2){
+        let goodtogo = false;
+        const exp = /[A-Z]/gi;
+        const col = algebraicNotation.match(exp);
+        console.log(col[0]);
+        if (alpha.includes(col[0])){
+            goodtogo = true;
+        }
+        algebraicNotation = algebraicNotation.substr(1);
+        console.log(algebraicNotation);
+        if(isNaN(algebraicNotation) || algebraicNotation > 27 || algebraicNotation < 3){
+            goodtogo = false;
+            console.log("notation is wrong");
+        }const row = algebraicNotation;
+        if(goodtogo){
+            let column;
+            for(i = 0; i<alpha.length; i++){
+                if(col[0] === alpha[i]){
+                    column = i;
+                }
+            }
+            const obj = {'row': row, 'col': column};
+
+            return obj;
+        }
+    }
+}
+
+function placeLetters(board, letter, algebraicNotation){
+
+}
+
+function boardToString(board){
+
+}
+
 //module exports
 
 module.exports = {
@@ -70,6 +113,8 @@ module.exports = {
     generateBoard: generateBoard    
 }
 
-const board = generateBoard(3,3);
-const out = setBoardCell(board, 'x', 1, 1);
+
+const board = generateBoard(20,20);
+//const out = setBoardCell(board, 'x', 1, 1);
+const out = algebraicToRowCol("A6");
 console.log(out);
