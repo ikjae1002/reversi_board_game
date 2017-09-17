@@ -170,6 +170,19 @@ function flip(board, row, col){
     return board;
 }
 
+function flipCells(board, cellsToFlip){
+    // Using the board passed in, flip the pieces in the cells specified 
+    // by cellsToFlip
+    
+    for(let i = 0; i < cellsToFlip.length; i++){
+        for(let j = 0; j < cellsToFlip[i].length; j++){
+            board = flip(board, cellsToFlip[i][j][0], cellsToFlip[i][j][1]);
+        }
+    }
+
+    return board;
+}
+
 //module exports
 
 module.exports = {
@@ -178,10 +191,11 @@ module.exports = {
 }
 
 
-const board = generateBoard(3,3);
+const board = generateBoard(4,4);
 //const out = setBoardCell(board, 'x', 1, 1);
 //const out = algebraicToRowCol("A6");
-const outb = placeLetters(board, 'X', 'A1', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3');
+const outa = placeLetters(board, 'O', 'A1', 'B1', 'B2');
+const outb = flipCells(outa, [[[0,0], [0,1]],[[1,1]]]);
 //const outb = flip(outa, 2, 0);
 const out = boardToString(outb);
 //const outa = isBoardFull(outb);
