@@ -153,6 +153,23 @@ function isBoardFull(board){
     return !board.includes(" ");
 }
 
+function flip(board, row, col){
+    // Using the board passed in, flip the piece at the specified row and 
+    // col so that it is the opposite color by changing X to O or O to X.
+    // If no letter is present, do not change the contents of the cell.
+
+    const ind = rowColToIndex(board, row, col);
+    if(board[ind] != " "){
+        if(board[ind] === "X"){
+            board[ind] = "O";
+        }else{
+            board[ind] = "X";
+        }
+    }
+    
+    return board;
+}
+
 //module exports
 
 module.exports = {
@@ -164,7 +181,8 @@ module.exports = {
 const board = generateBoard(3,3);
 //const out = setBoardCell(board, 'x', 1, 1);
 //const out = algebraicToRowCol("A6");
-const outb = placeLetters(board, 'x', 'A1', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3');
+const outb = placeLetters(board, 'X', 'A1', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3');
+//const outb = flip(outa, 2, 0);
 const out = boardToString(outb);
-const outa = isBoardFull(outb);
+//const outa = isBoardFull(outb);
 console.log(out, outa);
