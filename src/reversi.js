@@ -205,7 +205,7 @@ function getCellsToFlip(board, lastRow, lastCol){
     const change = new Array;
     
     //check right
-    for(let i = lastCol + 1; i< widthHeight; i++){
+    for(let i = lastCol + 1; i< widthHeight && board[rowColToIndex(board,lastRow,i)] !==" "; i++){
         const next = rowColToIndex(board, lastRow, i);
         console.log("right: ", lastRow, i);
         if(board[next] !== myletter && board[next] !== " "){
@@ -218,7 +218,7 @@ function getCellsToFlip(board, lastRow, lastCol){
 
     //check righttop
     let j = lastRow - 1
-    for(let i = lastCol + 1; i < widthHeight && j >= 0; i++, j--){
+    for(let i = lastCol + 1; i < widthHeight && j >= 0 && board[rowColToIndex(board,j,i)] !==" "; i++, j--){
         const next = rowColToIndex(board, j, i);
         console.log("righttop: ", j, i);
         if(board[next] !== myletter && board[next] !== " "){
@@ -230,7 +230,7 @@ function getCellsToFlip(board, lastRow, lastCol){
     }potential = new Array();
 
     //check top
-    for(let i = lastRow - 1; i >= 0; i--){
+    for(let i = lastRow - 1; i >= 0 && board[rowColToIndex(board,i, lastCol)] !==" "; i--){
         const next = rowColToIndex(board, i, lastCol);
         console.log("top: ",i,lastCol);
         if(board[next] !== myletter && board[next] !== " "){
@@ -243,7 +243,7 @@ function getCellsToFlip(board, lastRow, lastCol){
 
     // check lefttop
      j = lastCol - 1;
-    for(let i = lastRow - 1; i >=0 && j >=0; i--, j--){
+    for(let i = lastRow - 1; i >=0 && j >=0 && board[rowColToIndex(board,i,j)] !==" "; i--, j--){
         const next = rowColToIndex(board, i, j);
         console.log("lefttop: ",i,j);
         if(board[next] !== myletter && board[next] !== " "){
@@ -255,7 +255,7 @@ function getCellsToFlip(board, lastRow, lastCol){
     }potential = new Array();
 
     // check left
-    for(let i = lastCol - 1; i >= 0; i--){
+    for(let i = lastCol - 1; i >= 0 && board[rowColToIndex(board,lastRow,i)] !==" "; i--){
         const next = rowColToIndex(board, lastRow, i);
         console.log("left: ",lastRow,i);
         if(board[next] !== myletter && board[next] !== " "){
@@ -268,7 +268,7 @@ function getCellsToFlip(board, lastRow, lastCol){
 
     // check leftbottom
     j = lastCol - 1;
-    for(let i = lastRow + 1; i < widthHeight && j >=0; i++, j--){
+    for(let i = lastRow + 1; i < widthHeight && j >=0 && board[rowColToIndex(board,i,j)] !==" "; i++, j--){
         const next = rowColToIndex(board, i, j);
         console.log("leftbottom: ",i,j);
         if(board[next] !== myletter && board[next] !== " "){
@@ -280,7 +280,7 @@ function getCellsToFlip(board, lastRow, lastCol){
     }potential = new Array();
 
     // check bottom
-    for(let i = lastRow + 1; i < widthHeight; i++){
+    for(let i = lastRow + 1; i < widthHeight && board[rowColToIndex(board,i, lastCol)] !==" "; i++){
         const next = rowColToIndex(board, i, lastCol);
         console.log("bottom: ",i,lastCol);
         if(board[next] !== myletter && board[next] !== " "){
@@ -293,7 +293,7 @@ function getCellsToFlip(board, lastRow, lastCol){
 
     // check rightbottom
     j = lastRow + 1
-    for(let i = lastCol + 1; i < widthHeight && j < widthHeight; i++, j++){
+    for(let i = lastCol + 1; i < widthHeight && j < widthHeight && board[rowColToIndex(board,j,i)] !==" "; i++, j++){
         const next = rowColToIndex(board, j, i);
         console.log("rightbottom: ",j,i);
         if(board[next] !== myletter && board[next] !== " "){
@@ -305,6 +305,32 @@ function getCellsToFlip(board, lastRow, lastCol){
     }potential = new Array();
 
     return change;
+}
+
+function isValidMove(board, letter, row, col){
+    // Using the board passed in, determines whether or not a move with
+    // letter to row and col is valid.
+
+    const widthHeight = Math.sqrt(board.length);
+    if(row >= widthHeight || col >= widthHeight || row < 0 || col < 0){
+        return false;
+    }else{
+        const ind = rowColToIndex(board,row,col);
+        if(board[ind] !== " "){
+            return false;
+        }else{
+            let newboard = [...board];
+            const str = alpha[col] + (row+1);
+            newboard = placeLetters(newboard, letter, str);
+            const result = getCellsToFlip(newboard,row,col);
+            console.log(result[0][0]);
+            if(result[0][0] === undefined){
+                return false;
+            }else{
+                return true;
+            }
+        }
+    }
 }
 
 //module exports
@@ -322,8 +348,9 @@ board = placeLetters(board, 'O', 'C3', 'D3', 'E3','F2','C4','E4','F4','C5','D5',
 board = placeLetters(board, 'X', 'B2', 'D2', 'G1','B4','G4','B6','D6','F6','D4');
 //const outb = flipCells(outa, [[[0,0], [0,1]],[[1,1]]]);
 //const outb = flip(outa, 2, 0);
-const outb = getCellsToFlip(board, 3, 3);
-const outa = flipCells(board,outb);
-const out = boardToString(outa);
+//const outb = getCellsToFlip(board, 3, 3);
+//const outa = flipCells(board,outb);
+//const out = boardToString(outa);
 //const outa = isBoardFull(outb);
+const out = isValidMove(board,"X",0,5);
 console.log(out);
