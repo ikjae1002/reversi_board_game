@@ -333,6 +333,18 @@ function isValidMove(board, letter, row, col){
     }
 }
 
+function isValidMoveAlgebraicNotation(board, letter, algebraicNotation){
+    // Using the board passed in, determines whether or not a move with 
+    // letter to algebraicNotation is valid. Use the functions you previously
+    // created, isValidMove and algebraicToRowCol to implement this function.
+
+    const ob = algebraicToRowCol(algebraicNotation);
+    console.log(ob['row'],ob['col']);
+    return isValidMove(board, letter, ob['row'], ob['col']);
+}
+
+
+
 //module exports
 
 module.exports = {
@@ -345,12 +357,13 @@ let board = generateBoard(8,8, " ");
 //const out = setBoardCell(board, 'x', 1, 1);
 //const out = algebraicToRowCol("A6");
 board = placeLetters(board, 'O', 'C3', 'D3', 'E3','F2','C4','E4','F4','C5','D5','E5');
-board = placeLetters(board, 'X', 'B2', 'D2', 'G1','B4','G4','B6','D6','F6','D4');
+board = placeLetters(board, 'X', 'B2', 'D2', 'G1','B4','G4','B6','D6','F6');
 //const outb = flipCells(outa, [[[0,0], [0,1]],[[1,1]]]);
 //const outb = flip(outa, 2, 0);
 //const outb = getCellsToFlip(board, 3, 3);
 //const outa = flipCells(board,outb);
 //const out = boardToString(outa);
 //const outa = isBoardFull(outb);
-const out = isValidMove(board,"X",0,5);
+const out = isValidMoveAlgebraicNotation(board,"X",'D4');
+//const out = isValidMove(board,"X",3,3);
 console.log(out);
