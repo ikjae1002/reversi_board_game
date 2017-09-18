@@ -183,6 +183,130 @@ function flipCells(board, cellsToFlip){
     return board;
 }
 
+function getCellsToFlip(board, lastRow, lastCol){
+    // Using the board passed in determine which cells contain pieces to
+    // flip based on the last move. For example, if the last move was the
+    // x played at D3, then all of the O's on the board would be flipped
+    //    A   B   C   D
+    //  +---+---+---+---+
+    //1 |   |   |   | X |
+    //  +---+---+---+---+
+    //2 |   |   |   | O |
+    //  +---+---+---+---+
+    //3 | X | O | O | X |
+    //  +---+---+---+---+
+    //4 |   |   |   |   |
+    //  +---+---+---+---+
+
+    const widthHeight = Math.sqrt(board.length);
+    const myletter = board[rowColToIndex(board, lastRow, lastCol)];
+
+    let potential = new Array();
+    const change = new Array;
+    
+    //check right
+    for(let i = lastCol + 1; i< widthHeight; i++){
+        const next = rowColToIndex(board, lastRow, i);
+        console.log("right: ", lastRow, i);
+        if(board[next] !== myletter && board[next] !== " "){
+            potential.push([lastRow,i]);
+        }else if(board[next] === myletter){
+            console.log("good");
+            change.push(potential);
+        }
+    }potential = new Array();
+
+    //check righttop
+    let j = lastRow - 1
+    for(let i = lastCol + 1; i < widthHeight && j >= 0; i++, j--){
+        const next = rowColToIndex(board, j, i);
+        console.log("righttop: ", j, i);
+        if(board[next] !== myletter && board[next] !== " "){
+            potential.push([j,i]);
+        }else if(board[next] === myletter){
+            console.log("good");
+            change.push(potential);
+        }
+    }potential = new Array();
+
+    //check top
+    for(let i = lastRow - 1; i >= 0; i--){
+        const next = rowColToIndex(board, i, lastCol);
+        console.log("top: ",i,lastCol);
+        if(board[next] !== myletter && board[next] !== " "){
+            potential.push([i,lastCol]);
+        }else if(board[next] === myletter){
+            console.log("good");
+            change.push(potential);
+        }
+    }potential = new Array();
+
+    // check lefttop
+     j = lastCol - 1;
+    for(let i = lastRow - 1; i >=0 && j >=0; i--, j--){
+        const next = rowColToIndex(board, i, j);
+        console.log("lefttop: ",i,j);
+        if(board[next] !== myletter && board[next] !== " "){
+            potential.push([i,j]);
+        }else if(board[next] === myletter){
+            console.log("good");
+            change.push(potential);
+        }
+    }potential = new Array();
+
+    // check left
+    for(let i = lastCol - 1; i >= 0; i--){
+        const next = rowColToIndex(board, lastRow, i);
+        console.log("left: ",lastRow,i);
+        if(board[next] !== myletter && board[next] !== " "){
+            potential.push([lastRow,i]);
+        }else if(board[next] === myletter){
+            console.log("good");
+            change.push(potential);
+        }
+    }potential = new Array();
+
+    // check leftbottom
+    j = lastCol - 1;
+    for(let i = lastRow + 1; i < widthHeight && j >=0; i++, j--){
+        const next = rowColToIndex(board, i, j);
+        console.log("leftbottom: ",i,j);
+        if(board[next] !== myletter && board[next] !== " "){
+            potential.push([i,j]);
+        }else if(board[next] === myletter){
+            console.log("good");
+            change.push(potential);
+        }
+    }potential = new Array();
+
+    // check bottom
+    for(let i = lastRow + 1; i < widthHeight; i++){
+        const next = rowColToIndex(board, i, lastCol);
+        console.log("bottom: ",i,lastCol);
+        if(board[next] !== myletter && board[next] !== " "){
+            potential.push([i,lastCol]);
+        }else if(board[next] === myletter){
+            console.log("good");
+            change.push(potential);
+        }
+    }potential = new Array();
+
+    // check rightbottom
+    j = lastRow + 1
+    for(let i = lastCol + 1; i < widthHeight && j < widthHeight; i++, j++){
+        const next = rowColToIndex(board, j, i);
+        console.log("rightbottom: ",j,i);
+        if(board[next] !== myletter && board[next] !== " "){
+            potential.push([j,i]);
+        }else if(board[next] === myletter){
+            console.log("good");
+            change.push(potential);
+        }
+    }potential = new Array();
+
+    return change;
+}
+
 //module exports
 
 module.exports = {
@@ -191,12 +315,15 @@ module.exports = {
 }
 
 
-const board = generateBoard(4,4);
+let board = generateBoard(8,8, " ");
 //const out = setBoardCell(board, 'x', 1, 1);
 //const out = algebraicToRowCol("A6");
-const outa = placeLetters(board, 'O', 'A1', 'B1', 'B2');
-const outb = flipCells(outa, [[[0,0], [0,1]],[[1,1]]]);
+board = placeLetters(board, 'O', 'C3', 'D3', 'E3','F2','C4','E4','F4','C5','D5','E5');
+board = placeLetters(board, 'X', 'B2', 'D2', 'G1','B4','G4','B6','D6','F6','D4');
+//const outb = flipCells(outa, [[[0,0], [0,1]],[[1,1]]]);
 //const outb = flip(outa, 2, 0);
-const out = boardToString(outb);
+const outb = getCellsToFlip(board, 3, 3);
+const outa = flipCells(board,outb);
+const out = boardToString(outa);
 //const outa = isBoardFull(outb);
-console.log(out, outa);
+console.log(out);
