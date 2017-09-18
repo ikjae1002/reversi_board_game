@@ -213,6 +213,7 @@ function getCellsToFlip(board, lastRow, lastCol){
         }else if(board[next] === myletter){
             console.log("good");
             change.push(potential);
+            break;
         }
     }potential = new Array();
 
@@ -226,6 +227,7 @@ function getCellsToFlip(board, lastRow, lastCol){
         }else if(board[next] === myletter){
             console.log("good");
             change.push(potential);
+            break;
         }
     }potential = new Array();
 
@@ -238,6 +240,7 @@ function getCellsToFlip(board, lastRow, lastCol){
         }else if(board[next] === myletter){
             console.log("good");
             change.push(potential);
+            break;
         }
     }potential = new Array();
 
@@ -251,6 +254,8 @@ function getCellsToFlip(board, lastRow, lastCol){
         }else if(board[next] === myletter){
             console.log("good");
             change.push(potential);
+            console.log(potential, "whats wrong?");
+            break;
         }
     }potential = new Array();
 
@@ -263,6 +268,7 @@ function getCellsToFlip(board, lastRow, lastCol){
         }else if(board[next] === myletter){
             console.log("good");
             change.push(potential);
+            break;
         }
     }potential = new Array();
 
@@ -276,6 +282,7 @@ function getCellsToFlip(board, lastRow, lastCol){
         }else if(board[next] === myletter){
             console.log("good");
             change.push(potential);
+            break;
         }
     }potential = new Array();
 
@@ -288,6 +295,7 @@ function getCellsToFlip(board, lastRow, lastCol){
         }else if(board[next] === myletter){
             console.log("good");
             change.push(potential);
+            break;
         }
     }potential = new Array();
 
@@ -301,6 +309,7 @@ function getCellsToFlip(board, lastRow, lastCol){
         }else if(board[next] === myletter){
             console.log("good");
             change.push(potential);
+            break;
         }
     }potential = new Array();
 
@@ -323,12 +332,19 @@ function isValidMove(board, letter, row, col){
             const str = alpha[col] + (row+1);
             newboard = placeLetters(newboard, letter, str);
             const result = getCellsToFlip(newboard,row,col);
-            console.log(result[0][0]);
-            if(result[0][0] === undefined){
-                return false;
-            }else{
-                return true;
-            }
+            console.log(result, "errors?");
+            for(let i = 0; i < result.length; i++){
+                for(let j = 0; j < result[i].length; j++){
+                    if(result[i] !== undefined && result[i][j] !== undefined){
+                        return true
+                    }
+                }
+            }return false;
+            // if(result[0] === undefined || result[0][0] === undefined){
+            //     return false;
+            // }else{
+            //     return true;
+            // }
         }
     }
 }
@@ -343,7 +359,43 @@ function isValidMoveAlgebraicNotation(board, letter, algebraicNotation){
     return isValidMove(board, letter, ob['row'], ob['col']);
 }
 
+function getLetterCounts(board){
+    // Returns the counts of each of the letters on the supplied board.
+    // The counts are stored in an object where the count is the value and the
+    // letter is the property name. For example, if the board has 2 X's
+    // and 1 O, then the object return would be: { X: 2, O: 1}
 
+    const result = { X: 0, O: 0};
+    for(let i = 0; i < board.length; i++){
+        if(board[i] === "X"){
+            result['X'] += 1;
+        }else if(board[i] === "O"){
+            result['O'] += 1;
+        }
+    }
+
+    return result;
+}
+
+function getValidMoves(board, letter){
+    // Gives back a list of valid moves that the letter can make on the
+    // board. These moves are returned as a list of row and column pairs -
+    // an Array containing 2-element Arrays
+
+    const widthHeight = Math.sqrt(board.length);
+    const result = new Array();
+    for(let i = 0; i < widthHeight; i++){
+        for(let j = 0; j <widthHeight; j++){
+            console.log(i,j, "starting hererererererere");
+            if(isValidMove(board,letter,i,j)){
+                result.push([i,j]);
+                console.log(i,j,"Isnt this valid?", result);
+            }
+        }
+    }
+
+    return result;
+}
 
 //module exports
 
@@ -364,6 +416,7 @@ board = placeLetters(board, 'X', 'B2', 'D2', 'G1','B4','G4','B6','D6','F6');
 //const outa = flipCells(board,outb);
 //const out = boardToString(outa);
 //const outa = isBoardFull(outb);
-const out = isValidMoveAlgebraicNotation(board,"X",'D4');
+//const out = isValidMoveAlgebraicNotation(board,"X",'D4');
 //const out = isValidMove(board,"X",3,3);
-console.log(out);
+const out = getValidMoves(board,'X');
+console.log(out, "here");
