@@ -7,7 +7,7 @@ function repeat(ele, n){
     // repeat creates an array that contains value as each element
     // for n elements.
     let i;
-    const arr = new Array;
+    const arr = new Array();
     for(i = 0; i < n; i++){
         //console.log(arr);
         arr.push(ele);
@@ -73,26 +73,29 @@ function algebraicToRowCol(algebraicNotation){
     let i;
     if(algebraicNotation.length >= 2){
         let goodtogo = false;
+        let obj;
         const exp = /[A-Z]/gi;
         const col = algebraicNotation.match(exp);
-        if (alpha.includes(col[0])){
+        if (col !== null && alpha.includes(col[0])){
             goodtogo = true;
-        }
-        algebraicNotation = algebraicNotation.substr(1);
-        if(isNaN(algebraicNotation) || algebraicNotation > 26){
-            goodtogo = false;
-        }const row = algebraicNotation -1;
-        if(goodtogo){
-            let column;
-            for(i = 0; i<alpha.length; i++){
-                if(col[0] === alpha[i]){
-                    column = i;
+            algebraicNotation = algebraicNotation.substr(1);
+            if(isNaN(algebraicNotation) || algebraicNotation > 26 || algebraicNotation[0] === " "){
+                goodtogo = false;
+            }const row = algebraicNotation -1;
+            if(goodtogo){
+                let column;
+                for(i = 0; i<alpha.length; i++){
+                    if(col[0] === alpha[i]){
+                        column = i;
+                    }
                 }
+                obj = {'row': row, 'col': column};
+    
             }
-            const obj = {'row': row, 'col': column};
-
-            return obj;
+        }else{
+            goodtogo = false;
         }
+        return obj;
     }
 }
 
@@ -102,17 +105,18 @@ function placeLetters(board, letter, ...algebraicNotation){
 
     let i;
     let j;
+    const dup = board.slice(0);
     for(i = 0; i < algebraicNotation.length; i++){
         const ob = algebraicToRowCol(algebraicNotation[i]);
-        const copy = setBoardCell(board, letter, ob['row'], ob['col']);
+        const copy = setBoardCell(dup, letter, ob['row'], ob['col']);
         for(j = 0; j < copy.length; j++){
             if(letter === copy[j]){
-                board[j] = letter;
+                dup[j] = letter;
             }
         }
     }
 
-    return board;
+    return dup;
 }
 
 function boardToString(board){
@@ -122,26 +126,28 @@ function boardToString(board){
     //  - the contents of each cell
     //  - labels on the rows and columns
     const widthHeight = Math.sqrt(board.length);
-    let hor = "  +";
+    let out= "";
+    let hor = "   +";
     for(let i = 0; i < widthHeight; i++){
         hor += "---+";
     }
-    let col = "    ";
+    let col = "     ";
     for(let i = 0; i < widthHeight; i++){
         col += alpha[i];
         col += "   ";
     }//console.log(col);
     // console.log(hor);
-    let outstr = col; outstr += "\n" + hor;
+    out += col; out += '\n';
+    out += hor;
     for(let i = 0; i < widthHeight; i++){
-        let ver = i+1; ver += " | ";
+        let ver = " "; ver += i+1; ver += " | ";
         for(let j = 0; j < widthHeight; j++){
             const ind = rowColToIndex(board, i, j);
             ver += board[ind]; ver += " | ";
-        }outstr += "\n" + ver + "\n" + hor;
+        }out += "\n" + ver + "\n" + hor;
     }
 
-    return outstr;
+    return out;
 }
 
 function isBoardFull(board){
@@ -159,7 +165,7 @@ function flip(board, row, col){
     // If no letter is present, do not change the contents of the cell.
 
     const ind = rowColToIndex(board, row, col);
-    if(board[ind] != " "){
+    if(board[ind] !== " "){
         if(board[ind] === "X"){
             board[ind] = "O";
         }else{
@@ -207,25 +213,25 @@ function getCellsToFlip(board, lastRow, lastCol){
     //check right
     for(let i = lastCol + 1; i< widthHeight && board[rowColToIndex(board,lastRow,i)] !==" "; i++){
         const next = rowColToIndex(board, lastRow, i);
-        console.log("right: ", lastRow, i);
+        //console.log("right: ", lastRow, i);
         if(board[next] !== myletter && board[next] !== " "){
             potential.push([lastRow,i]);
         }else if(board[next] === myletter){
-            console.log("good");
+            //console.log("good");
             change.push(potential);
             break;
         }
     }potential = new Array();
 
     //check righttop
-    let j = lastRow - 1
+    let j = lastRow - 1;
     for(let i = lastCol + 1; i < widthHeight && j >= 0 && board[rowColToIndex(board,j,i)] !==" "; i++, j--){
         const next = rowColToIndex(board, j, i);
-        console.log("righttop: ", j, i);
+        //console.log("righttop: ", j, i);
         if(board[next] !== myletter && board[next] !== " "){
             potential.push([j,i]);
         }else if(board[next] === myletter){
-            console.log("good");
+            //console.log("good");
             change.push(potential);
             break;
         }
@@ -234,11 +240,11 @@ function getCellsToFlip(board, lastRow, lastCol){
     //check top
     for(let i = lastRow - 1; i >= 0 && board[rowColToIndex(board,i, lastCol)] !==" "; i--){
         const next = rowColToIndex(board, i, lastCol);
-        console.log("top: ",i,lastCol);
+        //console.log("top: ",i,lastCol);
         if(board[next] !== myletter && board[next] !== " "){
             potential.push([i,lastCol]);
         }else if(board[next] === myletter){
-            console.log("good");
+            //console.log("good");
             change.push(potential);
             break;
         }
@@ -248,13 +254,13 @@ function getCellsToFlip(board, lastRow, lastCol){
      j = lastCol - 1;
     for(let i = lastRow - 1; i >=0 && j >=0 && board[rowColToIndex(board,i,j)] !==" "; i--, j--){
         const next = rowColToIndex(board, i, j);
-        console.log("lefttop: ",i,j);
+        //console.log("lefttop: ",i,j);
         if(board[next] !== myletter && board[next] !== " "){
             potential.push([i,j]);
         }else if(board[next] === myletter){
-            console.log("good");
+            //console.log("good");
             change.push(potential);
-            console.log(potential, "whats wrong?");
+            //console.log(potential, "whats wrong?");
             break;
         }
     }potential = new Array();
@@ -262,11 +268,11 @@ function getCellsToFlip(board, lastRow, lastCol){
     // check left
     for(let i = lastCol - 1; i >= 0 && board[rowColToIndex(board,lastRow,i)] !==" "; i--){
         const next = rowColToIndex(board, lastRow, i);
-        console.log("left: ",lastRow,i);
+        //console.log("left: ",lastRow,i);
         if(board[next] !== myletter && board[next] !== " "){
             potential.push([lastRow,i]);
         }else if(board[next] === myletter){
-            console.log("good");
+            //console.log("good");
             change.push(potential);
             break;
         }
@@ -276,11 +282,11 @@ function getCellsToFlip(board, lastRow, lastCol){
     j = lastCol - 1;
     for(let i = lastRow + 1; i < widthHeight && j >=0 && board[rowColToIndex(board,i,j)] !==" "; i++, j--){
         const next = rowColToIndex(board, i, j);
-        console.log("leftbottom: ",i,j);
+        //console.log("leftbottom: ",i,j);
         if(board[next] !== myletter && board[next] !== " "){
             potential.push([i,j]);
         }else if(board[next] === myletter){
-            console.log("good");
+            //console.log("good");
             change.push(potential);
             break;
         }
@@ -289,25 +295,25 @@ function getCellsToFlip(board, lastRow, lastCol){
     // check bottom
     for(let i = lastRow + 1; i < widthHeight && board[rowColToIndex(board,i, lastCol)] !==" "; i++){
         const next = rowColToIndex(board, i, lastCol);
-        console.log("bottom: ",i,lastCol);
+        //console.log("bottom: ",i,lastCol);
         if(board[next] !== myletter && board[next] !== " "){
             potential.push([i,lastCol]);
         }else if(board[next] === myletter){
-            console.log("good");
+            //console.log("good");
             change.push(potential);
             break;
         }
     }potential = new Array();
 
     // check rightbottom
-    j = lastRow + 1
+    j = lastRow + 1;
     for(let i = lastCol + 1; i < widthHeight && j < widthHeight && board[rowColToIndex(board,j,i)] !==" "; i++, j++){
         const next = rowColToIndex(board, j, i);
-        console.log("rightbottom: ",j,i);
+        //console.log("rightbottom: ",j,i);
         if(board[next] !== myletter && board[next] !== " "){
             potential.push([j,i]);
         }else if(board[next] === myletter){
-            console.log("good");
+            //console.log("good");
             change.push(potential);
             break;
         }
@@ -332,11 +338,11 @@ function isValidMove(board, letter, row, col){
             const str = alpha[col] + (row+1);
             newboard = placeLetters(newboard, letter, str);
             const result = getCellsToFlip(newboard,row,col);
-            console.log(result, "errors?");
+            //console.log(result, "errors?");
             for(let i = 0; i < result.length; i++){
                 for(let j = 0; j < result[i].length; j++){
                     if(result[i] !== undefined && result[i][j] !== undefined){
-                        return true
+                        return true;
                     }
                 }
             }return false;
@@ -355,7 +361,7 @@ function isValidMoveAlgebraicNotation(board, letter, algebraicNotation){
     // created, isValidMove and algebraicToRowCol to implement this function.
 
     const ob = algebraicToRowCol(algebraicNotation);
-    console.log(ob['row'],ob['col']);
+    //console.log(ob['row'],ob['col']);
     return isValidMove(board, letter, ob['row'], ob['col']);
 }
 
@@ -401,15 +407,32 @@ function getValidMoves(board, letter){
 
 module.exports = {
     repeat: repeat,
-    generateBoard: generateBoard    
-}
+    generateBoard: generateBoard,
+    rowColToIndex: rowColToIndex,
+    indexToRowCol: indexToRowCol,
+    setBoardCell: setBoardCell,
+    algebraicToRowCol: algebraicToRowCol,
+    placeLetters: placeLetters,
+    boardToString: boardToString,
+    isBoardFull: isBoardFull,
+    flip: flip,
+    flipCells: flipCells,
+    isValidMove: isValidMove,
+    isValidMoveAlgebraicNotation: isValidMoveAlgebraicNotation,
+    getValidMoves:getValidMoves,
+    getCellsToFlip: getCellsToFlip,
+    getLetterCounts:getLetterCounts
+};
 
 
-let board = generateBoard(8,8, " ");
+let board = generateBoard(3, 3, " ");
+board = placeLetters(board, 'X', "B2");
+board = placeLetters(board, 'O', "C1");
+console.log(boardToString(board));
 //const out = setBoardCell(board, 'x', 1, 1);
 //const out = algebraicToRowCol("A6");
-board = placeLetters(board, 'O', 'C3', 'D3', 'E3','F2','C4','E4','F4','C5','D5','E5');
-board = placeLetters(board, 'X', 'B2', 'D2', 'G1','B4','G4','B6','D6','F6');
+//board = placeLetters(board, 'O', 'C3', 'D3', 'E3','F2','C4','E4','F4','C5','D5','E5');
+//board = placeLetters(board, 'X', 'B2', 'D2', 'G1','B4','G4','B6','D6','F6');
 //const outb = flipCells(outa, [[[0,0], [0,1]],[[1,1]]]);
 //const outb = flip(outa, 2, 0);
 //const outb = getCellsToFlip(board, 3, 3);
@@ -418,5 +441,5 @@ board = placeLetters(board, 'X', 'B2', 'D2', 'G1','B4','G4','B6','D6','F6');
 //const outa = isBoardFull(outb);
 //const out = isValidMoveAlgebraicNotation(board,"X",'D4');
 //const out = isValidMove(board,"X",3,3);
-const out = getValidMoves(board,'X');
-console.log(out, "here");
+//const out = getValidMoves(board,'X');
+//console.log(out, "here");
