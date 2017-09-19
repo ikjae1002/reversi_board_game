@@ -361,6 +361,10 @@ function isValidMoveAlgebraicNotation(board, letter, algebraicNotation){
     // created, isValidMove and algebraicToRowCol to implement this function.
 
     const ob = algebraicToRowCol(algebraicNotation);
+    //console.log("is object undefined?: ", ob);
+    if(ob === undefined){
+        return false;
+    }
     //console.log(ob['row'],ob['col']);
     return isValidMove(board, letter, ob['row'], ob['col']);
 }
@@ -392,10 +396,10 @@ function getValidMoves(board, letter){
     const result = new Array();
     for(let i = 0; i < widthHeight; i++){
         for(let j = 0; j <widthHeight; j++){
-            console.log(i,j, "starting hererererererere");
+            //console.log(i,j, "starting hererererererere");
             if(isValidMove(board,letter,i,j)){
                 result.push([i,j]);
-                console.log(i,j,"Isnt this valid?", result);
+                //console.log(i,j,"Isnt this valid?", result);
             }
         }
     }
@@ -425,10 +429,10 @@ module.exports = {
 };
 
 
-let board = generateBoard(3, 3, " ");
-board = placeLetters(board, 'X', "B2");
-board = placeLetters(board, 'O', "C1");
-console.log(boardToString(board));
+// let board = generateBoard(3, 3, " ");
+// board = placeLetters(board, 'X', "B2");
+// board = placeLetters(board, 'O', "C1");
+// console.log(boardToString(board));
 //const out = setBoardCell(board, 'x', 1, 1);
 //const out = algebraicToRowCol("A6");
 //board = placeLetters(board, 'O', 'C3', 'D3', 'E3','F2','C4','E4','F4','C5','D5','E5');
