@@ -1,14 +1,27 @@
 // app.js
 // you can name the object whatever you like
 // "rev" is used below...
-var rev = require('./reversi.js');
+const rev = require('./reversi.js');
+const fs = require('fs');
 
-var readlineSync = require('readline-sync');
+const readlineSync = require('readline-sync');
+
+console.log(process.argv[2]);
+
+fs.readFile(process.argv[2], 'utf8', function(err, data) {
+    console.log("inside readfile");
+    if (err) {
+        console.log('uh oh', err); 
+    } else {
+        console.log("printing data file");
+        console.log(data);
+    }
+    console.log(data);
+});
 
 const alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O',
 'P','Q','R','S','T','U','V','W','X','Y','Z'];
 
-let center;
 let answer = readlineSync.question('How wide should the board be? (even numbers between 4 and 26, inclusive): ');
 console.log(answer);
 while(isNaN(answer) || answer <4 || answer > 26){
@@ -19,7 +32,7 @@ let board = rev.generateBoard(answer,answer, " ");
 //console.log(rev.boardToString(board));
 
 let alg1 = alpha[Math.floor(answer/2) -1];
-let alg2 = alpha[Math.floor(answer/2)-1];; alg1 += Math.floor(answer/2); alg2 += (Math.floor(answer/2) +1);
+let alg2 = alpha[Math.floor(answer/2)-1]; alg1 += Math.floor(answer/2); alg2 += (Math.floor(answer/2) +1);
 let alg3 = alpha[Math.floor(answer/2)];
 let alg4 = alpha[Math.floor(answer/2)];
 alg3 += Math.floor(answer/2); alg4 += (Math.floor(answer/2) + 1);
@@ -65,17 +78,17 @@ while(passes < 4 && !rev.isBoardFull(board)){
         console.log(rev.getValidMoves(board, playerletter));
         console.log(rev.getValidMoves(board, playerletter)[0]);
         if(rev.getValidMoves(board, playerletter)[0] === undefined){
-            readlineSync.question("\nPlayer has no valid moves. Press <ENTER> to continue")
+            readlineSync.question("\nPlayer has no valid moves. Press <ENTER> to continue");
             passes += 1;
             playerTurn = false;
         }else{
             passes = 0;
             let moves = readlineSync.question('\nWhat is your move?: \n');
             while(!rev.isValidMoveAlgebraicNotation(board, playerletter, moves)){
-                console.log("\n\nINVALID MOVE. Your move shoud:")
+                console.log("\n\nINVALID MOVE. Your move shoud:");
                 console.log("* be in a format");
                 console.log("* specify an existing empty cell");
-                console.log("* flip at least one of your opponent's pieces\n")
+                console.log("* flip at least one of your opponent's pieces\n");
 
                 moves = readlineSync.question('\nWhat is your move?: \n');
             }
@@ -90,17 +103,18 @@ while(passes < 4 && !rev.isBoardFull(board)){
     }else{
         console.log("\nComputer's turn");
         if(rev.getValidMoves(board, completter)[0] === undefined){
-            readlineSync.question("\nComputer has no valid moves. Press <ENTER> to continue")
+            readlineSync.question("\nComputer has no valid moves. Press <ENTER> to continue");
             passes += 1;
             playerTurn = true;
         }else{
             passes = 0;
             const possible = rev.getValidMoves(board, completter);
             const ind = Math.floor(Math.random() * possible.length);
-            let mov = alpha[possible[ind][1]] + (possible[ind][0] + 1);
+            const mov = alpha[possible[ind][1]] + (possible[ind][0] + 1);
             board = rev.placeLetters(board, completter, mov);
             const fl = rev.getCellsToFlip(board, possible[ind][0],possible[ind][1]);
             board = rev.flipCells(board, fl);
+            readlineSync.question("\nIt's computer's turn! Press <ENTER> to show moves!");
             console.log(rev.boardToString(board));
             scores(board);
             playerTurn = true;  

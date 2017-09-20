@@ -140,7 +140,12 @@ function boardToString(board){
     out += col; out += '\n';
     out += hor;
     for(let i = 0; i < widthHeight; i++){
-        let ver = " "; ver += i+1; ver += " | ";
+        let ver = " "; ver += i+1; 
+        if(ver > 9){
+            ver += "| ";
+        }else{
+            ver += " | ";
+        }
         for(let j = 0; j < widthHeight; j++){
             const ind = rowColToIndex(board, i, j);
             ver += board[ind]; ver += " | ";
