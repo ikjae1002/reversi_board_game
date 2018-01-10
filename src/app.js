@@ -6,9 +6,9 @@ const fs = require('fs');
 
 const readlineSync = require('readline-sync');
 
-console.log(process.argv[2]);
+//console.log(process.argv[2]);
 
-fs.readFile(process.argv[2], 'utf8', function(err, data) {
+fs.readFile(process.argv[2], (err, data) => {
     console.log("inside readfile");
     if (err) {
         console.log('uh oh', err); 

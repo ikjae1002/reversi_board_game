@@ -28,6 +28,7 @@ describe('reversi', function() {
     describe('rowColToIndex', function() {
         it('translates a row and column to an index, assumes board is square', function() {
             const board = rev.generateBoard(3, 3, " ");
+            console.log(rev.rowColToIndex(board, 1, 1), "WTF");
             const i = rev.rowColToIndex(board, 1, 1);
             const j = rev.rowColToIndex(board, 0, 2);
             expect(i).to.equal(4);
